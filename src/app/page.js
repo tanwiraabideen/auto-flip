@@ -2,6 +2,7 @@ import Image from "next/image";
 import fetchNewData from "../../lib/actions/webScraping";
 
 export default function Home() {
-  fetchNewData()
+
+  // fetchNewData()
   return (<div>hello</div>);
 }
