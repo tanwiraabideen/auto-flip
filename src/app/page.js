@@ -1,5 +1,5 @@
 import Image from "next/image";
-import fetchNewData from "./actions/webScraping";
+import fetchNewData from "../../lib/actions/webScraping";
 
 export default function Home() {
   fetchNewData()
