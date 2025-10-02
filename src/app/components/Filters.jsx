@@ -2,8 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import { yearFilters, mileageFilters } from '../data/data'
+import { createClient } from '@/utils/supabase/client'
 
 export default function Filters() {
+
+    const supabase = createClient()
+    const [isLoading, setIsLoading] = useState(false)
+
     const [selectedMake, setSelectedMake] = useState(null)
     const [selectedModel, setSelectedModel] = useState(null)
     const [minPrice, setMinPrice] = useState(null)
@@ -20,6 +25,28 @@ export default function Filters() {
         models: carData[key].models
     }))
 
+    const setFilters = async () => {
+        setIsLoading(true)
+
+        try {
+            const { data, error } = await supabase
+                .from('Filters')
+                .insert({
+                    make: selectedMake,
+                    model: selectedModel,
+                    minPrice: minPrice,
+                    maxPrice: maxPrice,
+                    year: selectedYear,
+                    mileage: selectedMileage
+                })
+                .select();
+        } catch (error) {
+            console.log(`Error when uploading to supabase in setFilters handle: ${error}`)
+        }
+
+
+    }
+
 
     useEffect(() => {
         function getModels() {
@@ -35,23 +62,27 @@ export default function Filters() {
 
     // Use Effect hooks for each filter
     useEffect(() => {
+        const tempUrl = scrapeUrl
+        const params = new URLSearchParams(tempUrl.split("?")[1])
         if (selectedMake) {
-            const tempUrl = scrapeUrl
-            const params = new URLSearchParams(tempUrl.split("?")[1])
             params.set("vehicle_make", selectedMake.toLowerCase().replace(/\s+/g, "-"))
-            setScrapeUrl(tempUrl.split("?")[0] + "?" + params.toString())
+        } else {
+            params.set("vehicle_make", "any")
         }
+        setScrapeUrl(tempUrl.split("?")[0] + "?" + params.toString())
     }, [selectedMake])
 
 
 
     useEffect(() => {
+        const tempUrl = scrapeUrl
+        const params = new URLSearchParams(tempUrl.split("?")[1])
         if (selectedModel) {
-            const tempUrl = scrapeUrl
-            const params = new URLSearchParams(tempUrl.split("?")[1])
             params.set("vehicle_model", selectedModel.toLowerCase().replace(/\s+/g, "-"))
-            setScrapeUrl(tempUrl.split("?")[0] + "?" + params.toString())
+        } else {
+            params.set("vehicle_model", "any")
         }
+        setScrapeUrl(tempUrl.split("?")[0] + "?" + params.toString())
     }, [selectedModel])
 
     useEffect(() => {
@@ -96,13 +127,18 @@ export default function Filters() {
         console.log(scrapeUrl)
     }, [scrapeUrl])
 
+    const handeMakeAny = () => {
+        setSelectedMake(null)
+        setSelectedModel(null)
+    }
+
     return (
         <div id="filters-container" className="flex flex-row w-full space-x-5">
             <fieldset className='fieldset'>
                 <legend className='fieldset-legend'>Select a make</legend>
                 <select defaultValue="Make" className="select">
                     <option disabled={true}>Make</option>
-                    <option>Any</option>
+                    <option onClick={() => (handeMakeAny())}>Any</option>
                     {makesAndModels.map((make) => (
                         <option onClick={() => (setSelectedMake(make.make))} key={make.make}>{make.make}</option>
                     ))}
@@ -113,7 +149,7 @@ export default function Filters() {
                 <legend className='fieldset-legend'>Select a model</legend>
                 <select defaultValue="" className="select">
                     <option value={""} disabled={true}>Model</option>
-                    <option>Any</option>
+                    <option onClick={() => (setSelectedModel(null))}>Any</option>
                     {models ? models.map((model) => (
                         <option onClick={() => (setSelectedModel(model.text))} key={model.text}>{model.text}</option>
                     )) : <option disabled={true}>Model</option>}
@@ -171,6 +207,7 @@ export default function Filters() {
                 </select>
                 <p className="label">Optional</p>
             </fieldset>
+            <button className="btn rounded-xl" onClick={() => setFilters()}>Set filters</button>
 
         </div>
     )
