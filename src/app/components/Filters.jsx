@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { yearFilters, mileageFilters } from '../data/data'
 import { createClient } from '@/utils/supabase/client'
+import { createScrapeUrl } from '../actions/actions'
 
 export default function Filters() {
 
@@ -16,7 +17,6 @@ export default function Filters() {
     const [selectedYear, setSelectedYear] = useState(null)
     const [selectedMileage, setSelectedMileage] = useState(null)
     const [models, setModels] = useState(null)
-    const [scrapeUrl, setScrapeUrl] = useState("https://www.gumtree.com/search?search_category=cars&search_location=uk&vehicle_make=any&min_price=0&max_price=any&vehicle_model=any&vehicle_mileage=any&vehicle_registration_year=any")
 
     const carData = require('../../../gumtree-car-data.json')
 
@@ -24,6 +24,8 @@ export default function Filters() {
         make: carData[key].name,
         models: carData[key].models
     }))
+
+
 
     const setFilters = async () => {
         setIsLoading(true)
@@ -43,8 +45,6 @@ export default function Filters() {
         } catch (error) {
             console.log(`Error when uploading to supabase in setFilters handle: ${error}`)
         }
-
-
     }
 
 
@@ -61,6 +61,8 @@ export default function Filters() {
 
 
     // Use Effect hooks for each filter
+
+    /*
     useEffect(() => {
         const tempUrl = scrapeUrl
         const params = new URLSearchParams(tempUrl.split("?")[1])
@@ -122,10 +124,12 @@ export default function Filters() {
         }
     }, [selectedMileage])
 
+    
+
     // TEMP FUNCTION FOR TESTING
     useEffect(() => {
         console.log(scrapeUrl)
-    }, [scrapeUrl])
+    }, [scrapeUrl])*/
 
     const handeMakeAny = () => {
         setSelectedMake(null)
