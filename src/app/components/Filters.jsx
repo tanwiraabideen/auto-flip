@@ -1,13 +1,12 @@
 "use client"
 
+// Use a form so we can use formdata instead of tracking state
+
 import { useEffect, useState } from 'react'
 import { yearFilters, mileageFilters } from '../data/data'
-import { createClient } from '@/utils/supabase/client'
-import { createScrapeUrl } from '../actions/actions'
 
 export default function Filters() {
 
-    const supabase = createClient()
     const [isLoading, setIsLoading] = useState(false)
 
     const [selectedMake, setSelectedMake] = useState(null)
@@ -30,6 +29,9 @@ export default function Filters() {
     const setFilters = async () => {
         setIsLoading(true)
 
+        // UPDATE WHEN NEW DB IS SET UP
+
+        /*
         try {
             const { data, error } = await supabase
                 .from('Filters')
@@ -44,7 +46,7 @@ export default function Filters() {
                 .select();
         } catch (error) {
             console.log(`Error when uploading to supabase in setFilters handle: ${error}`)
-        }
+        } */
     }
 
 
@@ -59,77 +61,6 @@ export default function Filters() {
         setModels(getModels())
     }, [selectedMake])
 
-
-    // Use Effect hooks for each filter
-
-    /*
-    useEffect(() => {
-        const tempUrl = scrapeUrl
-        const params = new URLSearchParams(tempUrl.split("?")[1])
-        if (selectedMake) {
-            params.set("vehicle_make", selectedMake.toLowerCase().replace(/\s+/g, "-"))
-        } else {
-            params.set("vehicle_make", "any")
-        }
-        setScrapeUrl(tempUrl.split("?")[0] + "?" + params.toString())
-    }, [selectedMake])
-
-
-
-    useEffect(() => {
-        const tempUrl = scrapeUrl
-        const params = new URLSearchParams(tempUrl.split("?")[1])
-        if (selectedModel) {
-            params.set("vehicle_model", selectedModel.toLowerCase().replace(/\s+/g, "-"))
-        } else {
-            params.set("vehicle_model", "any")
-        }
-        setScrapeUrl(tempUrl.split("?")[0] + "?" + params.toString())
-    }, [selectedModel])
-
-    useEffect(() => {
-        if (minPrice) {
-            const tempUrl = scrapeUrl
-            const params = new URLSearchParams(tempUrl.split("?")[1])
-            params.set("min_price", minPrice)
-            setScrapeUrl(tempUrl.split("?")[0] + "?" + params.toString())
-        }
-    }, [minPrice])
-
-    useEffect(() => {
-        if (maxPrice) {
-            const tempUrl = scrapeUrl
-            const params = new URLSearchParams(tempUrl.split("?")[1])
-            params.set("max_price", maxPrice)
-            setScrapeUrl(tempUrl.split("?")[0] + "?" + params.toString())
-        }
-    }, [maxPrice])
-
-    useEffect(() => {
-        if (selectedYear) {
-            const tempUrl = scrapeUrl
-            const params = new URLSearchParams(tempUrl.split("?")[1])
-            params.set("vehicle_registration_year", selectedYear)
-            setScrapeUrl(tempUrl.split("?")[0] + "?" + params.toString())
-        }
-    }, [selectedYear])
-
-    useEffect(() => {
-        if (selectedMileage) {
-            const tempUrl = scrapeUrl
-            const params = new URLSearchParams(tempUrl.split("?")[1])
-            params.set("vehicle_mileage", selectedMileage
-            )
-            setScrapeUrl(tempUrl.split("?")[0] + "?" + params.toString())
-        }
-    }, [selectedMileage])
-
-    
-
-    // TEMP FUNCTION FOR TESTING
-    useEffect(() => {
-        console.log(scrapeUrl)
-    }, [scrapeUrl])*/
 
     const handeMakeAny = () => {
         setSelectedMake(null)
