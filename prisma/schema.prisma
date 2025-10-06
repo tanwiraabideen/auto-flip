@@ -24,6 +24,7 @@ model User {
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
+  filters       Filters[]
 
   @@unique([email])
   @@map("user")
@@ -72,4 +73,28 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+model Filters {
+  id       Int    @id @default(autoincrement())
+  make     String
+  model    String
+  minPrice Int
+  maxPrice Int
+  mileage  String
+  age      String
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+}
+
+model Cars {
+  id          Int       @id @default(autoincrement())
+  make        String
+  model       String
+  description String
+  price       Int
+  timePosted  DateTime?
+  location    String
+  year        Int?
+  mileage     Int?
 }

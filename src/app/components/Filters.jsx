@@ -4,18 +4,23 @@
 
 import { useEffect, useState } from 'react'
 import { yearFilters, mileageFilters } from '../data/data'
+import { useRouter } from 'next/navigation'
+import { createFilter } from '../../../lib/actions/actions'
 
-export default function Filters() {
-
+export default function Filters({ session }) {
     const [isLoading, setIsLoading] = useState(false)
 
     const [selectedMake, setSelectedMake] = useState(null)
     const [selectedModel, setSelectedModel] = useState(null)
-    const [minPrice, setMinPrice] = useState(null)
+    const [minPrice, setMinPrice] = useState(0)
     const [maxPrice, setMaxPrice] = useState(null)
     const [selectedYear, setSelectedYear] = useState(null)
     const [selectedMileage, setSelectedMileage] = useState(null)
     const [models, setModels] = useState(null)
+
+    const user = session.user
+
+    const router = useRouter()
 
     const carData = require('../../../gumtree-car-data.json')
 
@@ -25,28 +30,19 @@ export default function Filters() {
     }))
 
 
-
     const setFilters = async () => {
         setIsLoading(true)
 
-        // UPDATE WHEN NEW DB IS SET UP
-
-        /*
         try {
-            const { data, error } = await supabase
-                .from('Filters')
-                .insert({
-                    make: selectedMake,
-                    model: selectedModel,
-                    minPrice: minPrice,
-                    maxPrice: maxPrice,
-                    year: selectedYear,
-                    mileage: selectedMileage
-                })
-                .select();
+
+            // THIS MAY HAVE TO BE Filters not filters
+            await createFilter(selectedMake, selectedModel, minPrice, maxPrice, selectedMileage, selectedYear, user.id)
+            setIsLoading(false)
         } catch (error) {
-            console.log(`Error when uploading to supabase in setFilters handle: ${error}`)
-        } */
+            console.log(`Error when uploading filter to prisma: ${error}`)
+        }
+
+        router.push('/')
     }
 
 
@@ -102,7 +98,8 @@ export default function Filters() {
                         className="grow"
                         placeholder="0"
                         min="0"
-                        onChange={(e) => setMinPrice(e.target.value)}
+                        value={minPrice}
+                        onChange={(e) => setMinPrice(parseInt(e.target.value, 10))}
                     />
                 </label>
 
@@ -117,8 +114,9 @@ export default function Filters() {
                         type="number"
                         className="grow"
                         placeholder="Any"
-                        min="0"
-                        onChange={(e) => setMaxPrice(e.target.value)}
+                        min={minPrice}
+                        value={maxPrice}
+                        onChange={(e) => setMaxPrice(parseInt(e.target.value, 10))}
                     />
                 </label>
 

@@ -34,6 +34,9 @@ yarn-error.log*
 .env*
 .env.local
 
+# To-do
+To-do.txt
+
 # vercel
 .vercel
 

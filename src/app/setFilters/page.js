@@ -14,7 +14,7 @@ export default async function page() {
     return (
         <div id="main-container" className="w-full h-full">
             <div id="filters-wrapper" className="flex items-center justify-center">
-                <Filters></Filters>
+                <Filters session={session}></Filters>
             </div>
         </div>
     )
