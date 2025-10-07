@@ -1,12 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        serverComponentsExternalPackages: [
-            'puppeteer-extra',
-            'puppeteer-extra-plugin-stealth',
-        ],
-    },
+    // The `serverExternalPackages` option allows you to opt-out of bundling dependencies in your Server Components.
+    serverExternalPackages: ["@sparticuz/chromium", "puppeteer-core"],
 };
 
-// Change this line from module.exports
 export default nextConfig;
