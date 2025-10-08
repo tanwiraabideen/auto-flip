@@ -3,7 +3,6 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import { auth } from "../../lib/auth";
 import { headers } from "next/headers"
-import fetchNewData from "../../lib/actions/webScraping";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +23,6 @@ export default async function RootLayout({ children }) {
   const session = await auth.api.getSession({
     headers: await headers()
   })
-  fetchNewData()
 
   return (
     <html lang="en">
