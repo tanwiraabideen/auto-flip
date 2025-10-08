@@ -97,5 +97,5 @@ model Cars {
   location            String
   year                Int?
   mileage             Int?
-  timeAddedToDataBase DateTime
+  timeAddedToDataBase DateTime  @default(now())
 }

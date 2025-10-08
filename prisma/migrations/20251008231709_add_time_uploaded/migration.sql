@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Cars" ALTER COLUMN "timeAddedToDataBase" SET DEFAULT CURRENT_TIMESTAMP;
