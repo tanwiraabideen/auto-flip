@@ -88,13 +88,14 @@ model Filters {
 }
 
 model Cars {
-  id          Int       @id @default(autoincrement())
-  make        String
-  model       String
-  description String
-  price       Int
-  timePosted  DateTime?
-  location    String
-  year        Int?
-  mileage     Int?
+  id                  Int       @id @default(autoincrement())
+  make                String
+  model               String
+  description         String
+  price               Int
+  timePosted          DateTime?
+  location            String
+  year                Int?
+  mileage             Int?
+  timeAddedToDataBase DateTime
 }
