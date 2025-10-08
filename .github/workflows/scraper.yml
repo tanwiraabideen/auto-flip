@@ -1,0 +1,18 @@
+name: "AutoFlip Web Scraper"
+
+on:
+  schedule:
+    # This runs the job every 30 minutes
+    - cron: "*/15 * * * *"
+  # This line allows you to manually run the job from the Actions tab on GitHub
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Call the API endpoint to trigger the scrape"
+        run: |
+          curl --request GET \
+          --url 'https://auto-flip.vercel.app/api/cron' \
+          --header 'Authorization: Bearer ${{ secrets.CRON_SECRET }}'
